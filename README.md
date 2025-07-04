@@ -1,16 +1,18 @@
-# Cloudflare Workers OpenAPI 3.1
+# podcast-it
 
 This is a Cloudflare Worker with OpenAPI 3.1 using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono).
 
-This is an example project made to be used as a quick start into building OpenAPI compliant Workers that generates the
-`openapi.json` schema automatically from code and validates the incoming request to the defined parameters or request body.
+This project exposes a REST API for transforming text content into audio for podcast episodes.
 
 ## Get started
 
 1. Sign up for [Cloudflare Workers](https://workers.dev). The free tier is more than enough for most use cases.
-2. Clone this project and install dependencies with `npm install`
-3. Run `wrangler login` to login to your Cloudflare account in wrangler
-4. Run `wrangler deploy` to publish the API to Cloudflare Workers
+2. Clone this project and install dependencies with `npm install`.
+3. Create a R2 bucket with `npx wrangler r2 bucket create podcasts`.
+4. Create a D1 database with `npx wrangler@latest d1 create podcasts`.
+5. Create database schema with `npx wrangler d1 execute podcasts --local --file=./schema.sql`.
+6. Run `wrangler login` to login to your Cloudflare account in wrangler.
+7. Run `wrangler deploy` to publish the API to Cloudflare Workers.
 
 ## Project structure
 

@@ -1,0 +1,81 @@
+import { Bool, Num, OpenAPIRoute } from "chanfana";
+import { z } from "zod";
+import { type AppContext, Episode, EpisodeRecord } from "../types";
+
+const Result = z.object({
+    success: Bool(),
+    episodes: Episode.array()
+});
+
+export class EpisodeList extends OpenAPIRoute {
+    schema = {
+        tags: ["Episodes"],
+        summary: "List Episodes",
+        request: {
+            query: z.object({
+                page: Num({
+                    description: "Page number",
+                    default: 1,
+                    example: 1
+                }),
+                pageSize: Num({
+                    description: "Number of results per page",
+                    default: 10,
+                    example: 10
+                })
+            }),
+        },
+        responses: {
+            "200": {
+                description: "Returns a list of episodes",
+                content: {
+                    "application/json": {
+                        schema: z.object({
+                            series: Result,
+                        }),
+                    },
+                },
+            },
+        },
+    };
+
+    async handle(c: AppContext) {
+        const data = await this.getValidatedData<typeof this.schema>();
+        const { page, pageSize } = data.query;
+
+        if (page < 1 || pageSize < 1) {
+            return Response.json({
+                success: false,
+                error: "Page and page size cannot be less than 1",
+            }, {
+                status: 400
+            });
+        }
+
+        const query = `
+            SELECT *
+            FROM Episodes
+            ORDER BY Id
+            LIMIT ?
+            OFFSET ?
+        `;
+        const selectStmt = c.env.DB.prepare(query);
+        const result = await selectStmt.bind(pageSize, (page - 1) * pageSize).run<EpisodeRecord>();
+
+        const responseBody: z.infer<typeof Result> = {
+            success: true,
+            episodes: result.results.map(row => {
+                return {
+                    title: row.Title,
+                    description: row.Description,
+                    status: row.Status,
+                    slug: row.Slug,
+                    audioFile: row.AudioFile,
+                    transcript: row.Transcript
+                };
+            }),
+        };
+
+        return responseBody;
+    }
+}
