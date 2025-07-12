@@ -57,8 +57,6 @@ export class EpisodeCreate extends OpenAPIRoute {
         const insertResult = await insertStmt.bind(podcastToCreate.slug, podcastToCreate.title,
             podcastToCreate.description).run();
 
-        console.log(insertResult);
-
         if (!insertResult.meta.changed_db) {
             return new Response('Conflict: episode already exists', { status: 409 });
         }
@@ -68,10 +66,11 @@ export class EpisodeCreate extends OpenAPIRoute {
         });
         const hostNameToVoice = new Map(podcastToCreate.hosts.map(host => [host.name.toLowerCase(), host.voice]));
 
-        const scriptResponse = await client.responses.parse({
+        c.executionCtx.waitUntil(client.responses.parse({
             model: "gpt-4o-2024-08-06",
             input: [
-                { role: "system",
+                {
+                    role: "system",
                     content: `
                         You are a helpful assistant that converts blog posts into podcast scripts.
 
@@ -105,51 +104,49 @@ export class EpisodeCreate extends OpenAPIRoute {
             text: {
                 format: zodTextFormat(PodcastScript, "script"),
             },
-        });
+        }).then(async (response) => {
+            const script = response.output_parsed;
+            const audioBuffers = [];
+            let firstHeader: Buffer;
 
-        const script = scriptResponse.output_parsed;
+            for (let element of script.dialogue) {
+                const ttsResponse = await client.audio.speech.create({
+                    model: "gpt-4o-mini-tts",
+                    voice: hostNameToVoice.get(element.hostName.toLowerCase()),
+                    input: element.dialogue,
+                    instructions: "Tone should be professional, relatable, and charismatic in line with a podcast host",
+                    response_format: "wav",
+                });
+                const audioClip = Buffer.from(await ttsResponse.arrayBuffer());
+                const header = audioClip.subarray(0, 44);
+                const data = audioClip.subarray(44);
 
-        console.log(script);
-        console.log(script.dialogue.length);
+                if (!firstHeader) {
+                    firstHeader = Buffer.from(header); // Clone so we can modify it
+                }
 
-        const audioBuffers = [];
-        let firstHeader: Buffer;
-
-        for (let element of script.dialogue) {
-            const ttsResponse = await client.audio.speech.create({
-                model: "gpt-4o-mini-tts",
-                voice: hostNameToVoice.get(element.hostName.toLowerCase()),
-                input: element.dialogue,
-                instructions: "Tone should be professional, relatable, and charismatic in line with a podcast host",
-                response_format: "wav",
-            });
-            const audioClip = Buffer.from(await ttsResponse.arrayBuffer());
-            const header = audioClip.subarray(0, 44);
-            const data = audioClip.subarray(44);
-
-            if (!firstHeader) {
-                firstHeader = Buffer.from(header); // Clone so we can modify it
+                audioBuffers.push(data);
             }
 
-            audioBuffers.push(data);
-        }
+            const totalDataLength = audioBuffers.reduce((sum, d) => sum + d.length, 0);
+            const concatenatedData = Buffer.concat(audioBuffers);
 
-        const totalDataLength = audioBuffers.reduce((sum, d) => sum + d.length, 0);
-        const concatenatedData = Buffer.concat(audioBuffers);
+            // Update ChunkSize (file size - 8 bytes)
+            const chunkSize = 36 + totalDataLength;
+            firstHeader.writeUInt32LE(chunkSize, 4); // ChunkSize field (bytes 4–7)
 
-        // Update ChunkSize (file size - 8 bytes)
-        const chunkSize = 36 + totalDataLength;
-        firstHeader.writeUInt32LE(chunkSize, 4); // ChunkSize field (bytes 4–7)
+            // Update Subchunk2Size (data section size)
+            firstHeader.writeUInt32LE(totalDataLength, 40); // Subchunk2Size field (bytes 40–43)
 
-        // Update Subchunk2Size (data section size)
-        firstHeader.writeUInt32LE(totalDataLength, 40); // Subchunk2Size field (bytes 40–43)
+            // Combine header + data
+            const finalWavBuffer = Buffer.concat([firstHeader, concatenatedData]);
+            await c.env.podcasts.put(uploadName, finalWavBuffer);
 
-        // Combine header + data
-        const finalWavBuffer = Buffer.concat([firstHeader, concatenatedData]);
-        await c.env.podcasts.put(uploadName, finalWavBuffer);
-
-        const updateStmt = c.env.DB.prepare('UPDATE Episodes SET Status = \'complete\', Transcript = ?, AudioFile = ? WHERE Slug = ?');
-        await updateStmt.bind(JSON.stringify(script), uploadName, podcastToCreate.slug).run();
+            const updateStmt = c.env.DB.prepare('UPDATE Episodes SET Status = \'complete\', Transcript = ?, AudioFile = ? WHERE Slug = ?');
+            await updateStmt.bind(JSON.stringify(script), uploadName, podcastToCreate.slug).run();
+        }).catch((reason) => {
+            console.error(reason);
+        }));
 
         // TODO: Needs to also return uploadName as audioFile
         return {

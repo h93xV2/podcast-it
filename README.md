@@ -25,3 +25,13 @@ This project exposes a REST API for transforming text content into audio for pod
 1. Run `wrangler dev` to start a local instance of the API.
 2. Open `http://localhost:8787/` in your browser to see the Swagger interface where you can try the endpoints.
 3. Changes made in the `src/` folder will automatically trigger the server to reload, you only need to refresh the Swagger interface.
+
+## Securing the Deployments
+
+For a secure deployment, the following steps should suffice:
+1. Set up Cloudflare Zero Trust.
+2. Create an application for the dev worker URL.
+3. Create a service token.
+4. Create a policy which only accepts the service token.
+5. Assign the policy to the application.
+6. Deploy the application.
