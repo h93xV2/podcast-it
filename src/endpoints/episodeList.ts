@@ -1,4 +1,4 @@
-import { Bool, Num, OpenAPIRoute } from "chanfana";
+import { Bool, Num, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
 import { type AppContext, Episode, EpisodeRecord } from "../types";
 
@@ -22,7 +22,8 @@ export class EpisodeList extends OpenAPIRoute {
                     description: "Number of results per page",
                     default: 10,
                     example: 10
-                })
+                }),
+                status: Str({ description: "Status to search by", required: false })
             }),
         },
         responses: {
@@ -41,7 +42,7 @@ export class EpisodeList extends OpenAPIRoute {
 
     async handle(c: AppContext) {
         const data = await this.getValidatedData<typeof this.schema>();
-        const { page, pageSize } = data.query;
+        const { page, pageSize, status } = data.query;
 
         if (page < 1 || pageSize < 1) {
             return Response.json({
@@ -54,13 +55,19 @@ export class EpisodeList extends OpenAPIRoute {
 
         const query = `
             SELECT *
-            FROM Episodes
+            FROM Episodes${status ? ' WHERE Status = ?' : '' }
             ORDER BY Id
             LIMIT ?
             OFFSET ?
         `;
         const selectStmt = c.env.DB.prepare(query);
-        const result = await selectStmt.bind(pageSize, (page - 1) * pageSize).run<EpisodeRecord>();
+        const parameters = [pageSize.toString(), ((page - 1) * pageSize).toString()];
+
+        if (status) {
+            parameters.unshift(status);
+        }
+
+        const result = await selectStmt.bind(...parameters).run<EpisodeRecord>();
 
         const responseBody: z.infer<typeof Result> = {
             success: true,
