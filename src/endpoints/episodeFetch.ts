@@ -65,9 +65,7 @@ export class EpisodeFetch extends OpenAPIRoute {
         const responseBody: z.infer<typeof Result> = {
             success: true,
             episode: {
-                title: episodeRecord.Title,
                 slug: episodeRecord.Slug,
-                description: episodeRecord.Description,
                 audioFile: episodeRecord.AudioFile,
                 status: episodeRecord.Status,
                 transcript: episodeRecord.Transcript

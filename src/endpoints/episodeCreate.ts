@@ -53,9 +53,8 @@ export class EpisodeCreate extends OpenAPIRoute {
         const data = await this.getValidatedData<typeof this.schema>();
         const podcastToCreate = data.body;
         const uploadName = `${podcastToCreate.slug}.wav`;
-        const insertStmt = c.env.DB.prepare('INSERT INTO Episodes (Slug, Title, Description) VALUES (?, ?, ?) ON CONFLICT(Slug) DO NOTHING');
-        const insertResult = await insertStmt.bind(podcastToCreate.slug, podcastToCreate.title,
-            podcastToCreate.description).run();
+        const insertStmt = c.env.DB.prepare('INSERT INTO Episodes (Slug) VALUES (?) ON CONFLICT(Slug) DO NOTHING');
+        const insertResult = await insertStmt.bind(podcastToCreate.slug).run();
 
         if (!insertResult.meta.changed_db) {
             return new Response('Conflict: episode already exists', { status: 409 });
@@ -97,7 +96,6 @@ export class EpisodeCreate extends OpenAPIRoute {
                     content: JSON.stringify({
                         content: podcastToCreate.content,
                         hosts: podcastToCreate.hosts,
-                        podCastTitle: podcastToCreate.title
                     }),
                 },
             ],

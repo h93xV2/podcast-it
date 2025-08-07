@@ -73,8 +73,6 @@ export class EpisodeList extends OpenAPIRoute {
             success: true,
             episodes: result.results.map(row => {
                 return {
-                    title: row.Title,
-                    description: row.Description,
                     status: row.Status,
                     slug: row.Slug,
                     audioFile: row.AudioFile,

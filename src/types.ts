@@ -22,9 +22,7 @@ export const Host = z.object({
 });
 
 export const EpisodeInput = z.object({
-    title: Str({ example: "Hello world", required: true }),
     slug: Str({ required: true }),
-    description: Str({ required: true }),
     content: Str({ required: true }),
     hosts: z.array(Host)
 });
@@ -38,9 +36,7 @@ export const Episode = EpisodeInput
     });
 
 export type EpisodeRecord = {
-    Title: string;
     Slug: string;
-    Description: string;
     AudioFile: string;
     Status: string;
     Transcript?: string;
