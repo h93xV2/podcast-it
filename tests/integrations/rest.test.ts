@@ -76,6 +76,8 @@ describe("Get episodes list", () => {
 
 describe("Episode creation", () => {
     it("creates a podcast episode", async () => {
+        const testAudio = new Uint8Array(64);
+
         responsesParse.mockResolvedValue({
             output_parsed: {
                 dialogue: [
@@ -84,7 +86,7 @@ describe("Episode creation", () => {
             }
         });
         audioCreate.mockResolvedValue({
-            arrayBuffer: async () => new Uint8Array(64).buffer
+            arrayBuffer: async () => testAudio.buffer
         });
 
         const testSlug = "test";
@@ -110,6 +112,13 @@ describe("Episode creation", () => {
         expect(episode.slug).toBe(testSlug);
         expect(episode.status).toBe("complete");
         expect(episode.audioFile).toBe(`${testSlug}.wav`);
+
+        const audioResponse = await call(env, "GET", `http://example.com/api/audio/${episode.audioFile}`);
+        const audio = Buffer.from(await audioResponse.arrayBuffer());
+
+        expect(audioResponse.status).toBe(200);
+        expect(audio.byteLength).toBe(testAudio.byteLength);
+        expect([...audio.subarray(0, 4)]).toEqual([...testAudio.subarray(0, 4)]);
     });
 
     it("cannot create an episode that already exists", async () => {
