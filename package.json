@@ -23,5 +23,6 @@
     "miniflare": "^4.20250803.0",
     "vitest": "~3.2.0",
     "wrangler": "^4.24.0"
-  }
+  },
+  "license": "MIT"
 }
