@@ -35,7 +35,10 @@ For a secure deployment, the following steps should suffice:
 5. Assign the policy to the application.
 6. Deploy the application.
 
-## Testing Notes
+## Testing
 
+Run tests with `npm run test`.
+
+Caveats:
 - Currently, vitest watch mode is broken with D1 https://github.com/cloudflare/workers-sdk/issues/9913.
 - Vitest `__mocks__` do not work https://github.com/cloudflare/workers-sdk/issues/7679.
