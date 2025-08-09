@@ -65,9 +65,7 @@ export class EpisodeDelete extends OpenAPIRoute {
         // Return the deleted task for confirmation
         const result: z.infer<typeof Result> = {
             episode: {
-                title: deletedRow.Title,
                 slug,
-                description: deletedRow.Description,
                 status: 'deleted',
                 audioFile,
                 transcript: deletedRow.Transcript

@@ -8,10 +8,11 @@ This project exposes a REST API for transforming text content into audio for pod
 
 1. Sign up for [Cloudflare Workers](https://workers.dev). The free tier is more than enough for most use cases.
 2. Clone this project and install dependencies with `npm install`.
-3. Create a R2 bucket with `npx wrangler r2 bucket create podcasts`.
-4. Create a D1 database with `npx wrangler@latest d1 create podcasts`.
-5. Run `wrangler login` to login to your Cloudflare account in wrangler.
-6. Run `wrangler deploy` to publish the API to Cloudflare Workers.
+3. Create a `.dev.vars` file and add an `OPENAI_API_KEY` entry with an [OpenAI API key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key). 
+4. Create a R2 bucket with `npx wrangler r2 bucket create podcasts`.
+5. Create a D1 database with `npx wrangler@latest d1 create podcasts`.
+6. Run `wrangler login` to login to your Cloudflare account in wrangler.
+7. Run `wrangler deploy` to publish the API to Cloudflare Workers.
 
 ## Project structure
 

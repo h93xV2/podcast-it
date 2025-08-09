@@ -112,5 +112,36 @@ describe("Episode creation", () => {
         expect(episode.audioFile).toBe(`${testSlug}.wav`);
     });
 
+    it("cannot create an episode that already exists", async () => {
+        responsesParse.mockResolvedValue({
+            output_parsed: {
+                dialogue: [
+                    { hostName: "Test Host", dialogue: "Hello" },
+                ]
+            }
+        });
+        audioCreate.mockResolvedValue({
+            arrayBuffer: async () => new Uint8Array(64).buffer
+        });
+
+        const podcastToCreate = {
+            slug: "test",
+            content: "This is a simple test",
+            hosts: [{
+                "name": "Test Host",
+                "voice": "alloy"
+            }]
+        };
+
+        const firstCreateResponse = await call(env, "POST", "http://example.com/api/episodes", podcastToCreate);
+
+        expect(firstCreateResponse.status).toBe(200);
+
+        const secondCreateResponse = await call(env, "POST", "http://example.com/api/episodes", podcastToCreate);
+
+        expect(secondCreateResponse.status).toBe(409);
+        expect(await secondCreateResponse.text()).toBe('Conflict: episode already exists');
+    });
+
     // TODO: Add a new status "error" to the database.
 });

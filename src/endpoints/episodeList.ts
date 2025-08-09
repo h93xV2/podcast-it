@@ -55,7 +55,7 @@ export class EpisodeList extends OpenAPIRoute {
 
         const query = `
             SELECT *
-            FROM Episodes${status ? ' WHERE Status = ?' : '' }
+            FROM Episodes${status ? ' WHERE Status = ?' : ''}
             ORDER BY Id
             LIMIT ?
             OFFSET ?
