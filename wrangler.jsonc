@@ -34,7 +34,8 @@
         {
             "binding": "DB",
             "database_name": "podcasts",
-            "database_id": "da7da40e-c9ac-4115-8773-1dcdeb8f4635"
+            "database_id": "da7da40e-c9ac-4115-8773-1dcdeb8f4635",
+            "migrations_dir": "migrations"
         }
     ],
     /**

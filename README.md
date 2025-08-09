@@ -10,9 +10,8 @@ This project exposes a REST API for transforming text content into audio for pod
 2. Clone this project and install dependencies with `npm install`.
 3. Create a R2 bucket with `npx wrangler r2 bucket create podcasts`.
 4. Create a D1 database with `npx wrangler@latest d1 create podcasts`.
-5. Create database schema with `npx wrangler d1 execute podcasts --local --file=./schema.sql`.
-6. Run `wrangler login` to login to your Cloudflare account in wrangler.
-7. Run `wrangler deploy` to publish the API to Cloudflare Workers.
+5. Run `wrangler login` to login to your Cloudflare account in wrangler.
+6. Run `wrangler deploy` to publish the API to Cloudflare Workers.
 
 ## Project structure
 
@@ -22,7 +21,7 @@ This project exposes a REST API for transforming text content into audio for pod
 
 ## Development
 
-1. Run `wrangler dev` to start a local instance of the API.
+1. Run `npm start` to start a local instance of the API.
 2. Open `http://localhost:8787/` in your browser to see the Swagger interface where you can try the endpoints.
 3. Changes made in the `src/` folder will automatically trigger the server to reload, you only need to refresh the Swagger interface.
 
@@ -35,3 +34,8 @@ For a secure deployment, the following steps should suffice:
 4. Create a policy which only accepts the service token.
 5. Assign the policy to the application.
 6. Deploy the application.
+
+## Testing Notes
+
+- Currently, vitest watch mode is broken with D1 https://github.com/cloudflare/workers-sdk/issues/9913.
+- Vitest `__mocks__` do not work https://github.com/cloudflare/workers-sdk/issues/7679.

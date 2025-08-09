@@ -39,7 +39,7 @@ export type EpisodeRecord = {
     Slug: string;
     AudioFile: string;
     Status: string;
-    Transcript?: string;
+    Transcript: string;
 };
 
 export const PodcastScript = z.object({

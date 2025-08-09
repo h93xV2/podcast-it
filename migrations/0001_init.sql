@@ -9,7 +9,5 @@ CREATE TABLE IF NOT EXISTS Episodes (
             'complete'
         )
     ) NOT NULL DEFAULT 'pending',
-    Title TEXT NOT NULL,
-    "Description" TEXT NOT NULL,
     Transcript TEXT
 );

@@ -105,12 +105,16 @@ export class EpisodeCreate extends OpenAPIRoute {
         }).then(async (response) => {
             const script = response.output_parsed;
             const audioBuffers = [];
-            let firstHeader: Buffer;
+            let firstHeader: Buffer | undefined = undefined;
+
+            if (!script) {
+                throw new Error("Script was not received from model");
+            }
 
             for (let element of script.dialogue) {
                 const ttsResponse = await client.audio.speech.create({
                     model: "gpt-4o-mini-tts",
-                    voice: hostNameToVoice.get(element.hostName.toLowerCase()),
+                    voice: hostNameToVoice.get(element.hostName.toLowerCase()) || "alloy",
                     input: element.dialogue,
                     instructions: "Tone should be professional, relatable, and charismatic in line with a podcast host",
                     response_format: "wav",
@@ -124,6 +128,10 @@ export class EpisodeCreate extends OpenAPIRoute {
                 }
 
                 audioBuffers.push(data);
+            }
+
+            if (!firstHeader) {
+                throw new Error("No header found from first audio sample");
             }
 
             const totalDataLength = audioBuffers.reduce((sum, d) => sum + d.length, 0);
