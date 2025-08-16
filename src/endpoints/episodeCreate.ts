@@ -18,8 +18,8 @@ export class EpisodeCreate extends OpenAPIRoute {
             },
         },
         responses: {
-            "200": {
-                description: "Returns the created podcast",
+            "202": {
+                description: "Returns the details of requested podcast",
                 content: {
                     "application/json": {
                         schema: z.object({
@@ -155,9 +155,14 @@ export class EpisodeCreate extends OpenAPIRoute {
         }));
 
         // TODO: Needs to also return uploadName as audioFile
-        return {
+        return new Response(JSON.stringify({
             success: true,
-            episode: {...podcastToCreate, status: "pending"},
-        };
+            episode: { ...podcastToCreate, status: "pending" },
+        }), {
+            status: 202,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     }
 }
