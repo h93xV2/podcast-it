@@ -26,7 +26,7 @@ export class EpisodeCreate extends OpenAPIRoute {
                             series: z.object({
                                 success: Bool(),
                                 result: z.object({
-                                    task: Episode,
+                                    episode: Episode,
                                 }),
                             }),
                         }),
@@ -157,7 +157,7 @@ export class EpisodeCreate extends OpenAPIRoute {
         // TODO: Needs to also return uploadName as audioFile
         return {
             success: true,
-            podcast: podcastToCreate,
+            episode: {...podcastToCreate, status: "pending"},
         };
     }
 }

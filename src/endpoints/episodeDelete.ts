@@ -45,7 +45,7 @@ export class EpisodeDelete extends OpenAPIRoute {
         const { slug } = data.params;
 
         // Implement your own object deletion here
-        const deleteStmt = c.env.DB.prepare('DELETE FROM Episodes WHERE Slug = ? RETURNING AudioFile, Title, Description, Transcript');
+        const deleteStmt = c.env.DB.prepare('DELETE FROM Episodes WHERE Slug = ? RETURNING AudioFile, Transcript');
         const deleteResult = await deleteStmt.bind(slug).run<DeleteRow>();
         const deletedRow = deleteResult.results[0];
 
