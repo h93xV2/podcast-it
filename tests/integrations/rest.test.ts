@@ -101,7 +101,7 @@ describe("Episode creation", () => {
         const createResponse = await call(env, "POST", "http://example.com/api/episodes", podcastToCreate);
         const createStatusCode = createResponse.status;
 
-        expect(createStatusCode).toBe(200);
+        expect(createStatusCode).toBe(202);
 
         const getResponse = await call(env, "GET", `http://example.com/api/episodes/${testSlug}`);
         const getStatusCode = getResponse.status;
@@ -144,7 +144,7 @@ describe("Episode creation", () => {
 
         const firstCreateResponse = await call(env, "POST", "http://example.com/api/episodes", podcastToCreate);
 
-        expect(firstCreateResponse.status).toBe(200);
+        expect(firstCreateResponse.status).toBe(202);
 
         const secondCreateResponse = await call(env, "POST", "http://example.com/api/episodes", podcastToCreate);
 
