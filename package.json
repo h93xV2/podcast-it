@@ -5,7 +5,7 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "migrate": "wrangler d1 migrations apply podcasts --local",
-    "start": "npm run migrate && wrangler dev",
+    "dev": "npm run migrate && wrangler dev",
     "cf-typegen": "wrangler types",
     "test-watch": "vitest --config vitest.config.ts",
     "test": "vitest run --config vitest.config.ts"
