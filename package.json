@@ -9,7 +9,7 @@
     "cf-typegen": "wrangler types",
     "test-watch": "vitest --config vitest.config.ts",
     "test": "vitest run --config vitest.config.ts",
-    "prepare": "husky install",
+    "prepare": "husky",
     "prepush": "npm test"
   },
   "dependencies": {
