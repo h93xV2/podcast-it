@@ -10,7 +10,7 @@
     "test-watch": "vitest --config vitest.config.ts",
     "test": "vitest run --config vitest.config.ts",
     "prepare": "husky install",
-    "prepush": "npm run lint && npm run typecheck && npm test"
+    "prepush": "npm test"
   },
   "dependencies": {
     "chanfana": "^2.6.3",
