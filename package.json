@@ -23,7 +23,6 @@
     "devDependencies": {
         "@cloudflare/vitest-pool-workers": "^0.8.60",
         "@types/node": "^22.13.0",
-        "@types/service-worker-mock": "^2.0.4",
         "dotenv": "^17.2.1",
         "husky": "^9.1.7",
         "miniflare": "^4.20250803.0",
