@@ -1,31 +1,35 @@
 {
-  "name": "cloudflare-workers-openapi",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "deploy": "wrangler deploy",
-    "migrate": "wrangler d1 migrations apply podcasts --local",
-    "dev": "npm run migrate && wrangler dev",
-    "cf-typegen": "wrangler types",
-    "test-watch": "vitest --config vitest.config.ts",
-    "test": "vitest run --config vitest.config.ts",
-    "prepare": "husky",
-    "prepush": "npm test"
-  },
-  "dependencies": {
-    "chanfana": "^2.6.3",
-    "hono": "^4.6.20",
-    "openai": "^5.8.2",
-    "zod": "^3.25.67"
-  },
-  "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.60",
-    "@types/node": "22.13.0",
-    "@types/service-worker-mock": "^2.0.4",
-    "husky": "^9.1.7",
-    "miniflare": "^4.20250803.0",
-    "vitest": "~3.2.0",
-    "wrangler": "^4.24.0"
-  },
-  "license": "MIT"
+    "name": "cloudflare-workers-openapi",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "deploy": "wrangler deploy",
+        "migrate": "wrangler d1 migrations apply podcasts --local",
+        "dev": "npm run migrate && wrangler dev",
+        "cf-typegen": "wrangler types",
+        "test-watch": "vitest --config vitest.config.ts",
+        "test": "vitest run --config vitest.config.ts",
+        "prepare": "husky",
+        "prepush": "npm run typecheck && npm test",
+        "typecheck": "tsc -p tsconfig.json"
+    },
+    "dependencies": {
+        "chanfana": "^2.6.3",
+        "hono": "^4.6.20",
+        "openai": "^5.8.2",
+        "zod": "^3.25.67"
+    },
+    "devDependencies": {
+        "@cloudflare/vitest-pool-workers": "^0.8.60",
+        "@types/node": "^22.13.0",
+        "@types/service-worker-mock": "^2.0.4",
+        "dotenv": "^17.2.1",
+        "husky": "^9.1.7",
+        "miniflare": "^4.20250803.0",
+        "typescript": "^5.9.2",
+        "vitest": "~3.2.0",
+        "wrangler": "^4.24.0"
+    },
+    "license": "MIT"
 }

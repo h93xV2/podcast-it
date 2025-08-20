@@ -71,7 +71,7 @@ export class EpisodeList extends OpenAPIRoute {
 
         const responseBody: z.infer<typeof Result> = {
             success: true,
-            episodes: result.results.map(row => {
+            episodes: result.results.map((row: EpisodeRecord) => {
                 return {
                     status: row.Status,
                     slug: row.Slug,
