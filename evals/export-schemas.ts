@@ -1,3 +1,6 @@
+/**
+ * Converts Zod schemas defined in the Worker source code into JSON files which can be used for evaluations.
+ */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { PodcastScript } from '../src/types/types';
@@ -16,13 +19,12 @@ const responseFormat = {
   schema: inner
 };
 
-// Write the wrapped file
 writeFileSync(
   'evals/schemas/podcast-script.response_format.json',
   JSON.stringify(responseFormat, null, 2)
 );
 
 writeFileSync(
-  'evals/schemas/podcast-script.expected_format.json',    // <- for tests
+  'evals/schemas/podcast-script.expected_format.json',
   JSON.stringify(inner, null, 2)
 );
