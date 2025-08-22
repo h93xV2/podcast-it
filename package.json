@@ -1,5 +1,5 @@
 {
-    "name": "cloudflare-workers-openapi",
+    "name": "podcast-it",
     "version": "0.0.3",
     "private": true,
     "type": "module",
@@ -12,7 +12,9 @@
         "test": "vitest run --config vitest.config.ts",
         "prepare": "husky",
         "prepush": "npm run typecheck && npm test",
-        "typecheck": "tsc -p tsconfig.json"
+        "typecheck": "tsc -p tsconfig.json",
+        "export-schemas": "tsx evals/export-schemas.ts",
+        "evals": "npm run export-schemas && npx dotenvx run -f .dev.vars -- sh -c 'cd evals && PROMPTFOO_DISABLE_TELEMETRY=1 promptfoo eval'"
     },
     "dependencies": {
         "chanfana": "^2.6.3",
@@ -22,13 +24,15 @@
     },
     "devDependencies": {
         "@cloudflare/vitest-pool-workers": "^0.8.60",
+        "@dotenvx/dotenvx": "^1.49.0",
         "@types/node": "^22.13.0",
-        "dotenv": "^17.2.1",
         "husky": "^9.1.7",
         "miniflare": "^4.20250803.0",
+        "promptfoo": "^0.117.8",
         "typescript": "^5.9.2",
         "vitest": "~3.2.0",
-        "wrangler": "^4.24.0"
+        "wrangler": "^4.24.0",
+        "zod-to-json-schema": "^3.24.6"
     },
     "license": "MIT"
 }

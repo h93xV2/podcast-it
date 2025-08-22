@@ -1,8 +1,9 @@
 import { Bool, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
-import { type AppContext, EpisodeInput, PodcastScript, Episode } from "../types";
+import { type AppContext, EpisodeInput, PodcastScript, Episode } from "../types/types";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
+import prompt from "./episodeCreatePrompt.txt";
 
 export class EpisodeCreate extends OpenAPIRoute {
     schema = {
@@ -70,26 +71,7 @@ export class EpisodeCreate extends OpenAPIRoute {
             input: [
                 {
                     role: "system",
-                    content: `
-                        You are a helpful assistant that converts blog posts into podcast scripts.
-
-                        Instructions:
-                            - Read the provided blog post text carefully.
-                            - Summarize and rephrase the content in a conversational tone suitable for spoken audio.
-                            - Write the script as lines of dialogue between multiple hosts. You may create natural back-and-forth exchanges between them.
-                            - Make the script engaging, clear, and natural for listening.
-                            - Assign each line to a host using the names as provided.
-                            - Do not include any other narration, instructions, or metadata beyond the dialogue itself.
-
-                        Additional Guidance:
-                            - Break the script into multiple short lines to improve pacing and variety.
-                            - Paraphrase ideas rather than copying text verbatim.
-                            - Distribute the dialogue naturally between the hosts.
-                            - Preserve all important information, examples, and insights from the blog post.
-                            - Do not add content that is not in the original text.
-                            - The output must be valid JSON and must not include any explanation or extra text.
-                            - Make sure the dialogue makes sense for the number of hosts. One host will speak differently than multiple hosts.
-                    `
+                    content: prompt
                 },
                 {
                     role: "user",

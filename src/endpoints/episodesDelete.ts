@@ -1,5 +1,5 @@
 import { OpenAPIRoute } from "chanfana";
-import { AppContext } from "../types";
+import { AppContext } from "../types/types";
 
 export class EpisodesDelete extends OpenAPIRoute {
     schema = {

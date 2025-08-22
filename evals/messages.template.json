@@ -1,0 +1,10 @@
+[
+    {
+        "role": "system",
+        "content": "{{ system }}"
+    },
+    {
+        "role": "user",
+        "content": "{ \"content\": {{ content }}, \"hosts\": {{ hosts }} }"
+    }
+]
