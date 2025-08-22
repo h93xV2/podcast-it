@@ -11,7 +11,7 @@
         "test-watch": "vitest --config vitest.config.ts",
         "test": "vitest run --config vitest.config.ts",
         "prepare": "husky",
-        "prepush": "npm run typecheck && npm test",
+        "prepush": "npm run typecheck && npm test && npm run evals",
         "typecheck": "tsc -p tsconfig.json",
         "export-schemas": "tsx evals/export-schemas.ts",
         "evals": "npm run export-schemas && npx dotenvx run -f .dev.vars -- sh -c 'cd evals && PROMPTFOO_DISABLE_TELEMETRY=1 promptfoo eval'",
