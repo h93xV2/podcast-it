@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+
+# Learn more about building a configuration: https://promptfoo.dev/docs/configuration/guide
+
+description: "podcast-it eval"
+
+prompts:
+  - file://messages.template.json
+  
+
+providers:
+  - id: "openai:responses:gpt-4o-2024-08-06"
+    config:
+      response_format: file://schemas/podcast-script.response_format.json
+
+defaultTest:
+  vars:
+    system: file://../src/endpoints/episodeCreatePrompt.txt
+    hosts:
+      - { name: Alice, voice: ash }
+      - { name: Bob, voice: alloy }
+  assert:
+    - type: is-json
+      value: file://schemas/podcast-script.expected_format.json
+
+tests:
+  - vars:
+      content: bananas
+
+  - vars:
+      content: avocado toast
+    assert:
+      # For more information on assertions, see https://promptfoo.dev/docs/configuration/expected-outputs
+
+      # Make sure output contains the word "avocado"
+      - type: icontains
+        value: avocado
+  
+  - vars:
+      content: new york city
+    assert:
+      # For more information on model-graded evals, see https://promptfoo.dev/docs/configuration/expected-outputs/model-graded
+      - type: llm-rubric
+        value: ensure that the output is conversational
+

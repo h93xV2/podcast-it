@@ -1,6 +1,6 @@
 import { Bool, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
-import { AppContext } from "../types";
+import { AppContext } from "../types/types";
 
 export class AudioFetch extends OpenAPIRoute {
     schema = {

@@ -1,6 +1,6 @@
 import { Bool, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
-import { type AppContext, Episode } from "../types";
+import { type AppContext, Episode } from "../types/types";
 
 const Result = z.object({
     success: Bool(),

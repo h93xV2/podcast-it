@@ -43,3 +43,9 @@ Run tests with `npm run test`.
 Caveats:
 - Currently, vitest watch mode is broken with D1 https://github.com/cloudflare/workers-sdk/issues/9913.
 - Vitest `__mocks__` do not work https://github.com/cloudflare/workers-sdk/issues/7679.
+
+## LLM Evaluations
+
+The project aims to systematically evaluate the performance of its LLM usage.
+
+To run evals, use `npm run evals`.
