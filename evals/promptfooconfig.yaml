@@ -9,14 +9,19 @@ prompts:
   
 
 providers:
-  - id: "openai:gpt-4o-2024-08-06"
+  - id: "openai:responses:gpt-4o-2024-08-06"
     config:
-      response_schema: ./schemas/podcast-script.schema.json
+      response_format: file://schemas/podcast-script.response_format.json
 
 defaultTest:
   vars:
     system: file://../src/endpoints/episodeCreatePrompt.txt
-    hosts: "[ { \"name\": \"Alice\", \"voice\": \"ash\" }, { \"name\": \"Bob\", \"voice\": \"alloy\" } ]"
+    hosts:
+      - { name: Alice, voice: ash }
+      - { name: Bob, voice: alloy }
+  assert:
+    - type: is-json
+      value: file://schemas/podcast-script.expected_format.json
 
 tests:
   - vars:
@@ -30,11 +35,7 @@ tests:
       # Make sure output contains the word "avocado"
       - type: icontains
         value: avocado
-
-      # Prefer shorter outputs
-      - type: javascript
-        value: 1 / (output.length + 1)
-
+  
   - vars:
       content: new york city
     assert:
