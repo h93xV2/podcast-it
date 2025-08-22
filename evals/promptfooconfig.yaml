@@ -22,6 +22,8 @@ defaultTest:
   assert:
     - type: is-json
       value: file://schemas/podcast-script.expected_format.json
+    - type: llm-rubric
+      value: Ensure the output is conversational and the hosts mention their names
 
 tests:
   - vars:
@@ -38,8 +40,4 @@ tests:
   
   - vars:
       content: new york city
-    assert:
-      # For more information on model-graded evals, see https://promptfoo.dev/docs/configuration/expected-outputs/model-graded
-      - type: llm-rubric
-        value: ensure that the output is conversational
 

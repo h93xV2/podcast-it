@@ -15,7 +15,7 @@
         "typecheck": "tsc -p tsconfig.json",
         "export-schemas": "tsx evals/export-schemas.ts",
         "evals": "npm run export-schemas && npx dotenvx run -f .dev.vars -- sh -c 'cd evals && PROMPTFOO_DISABLE_TELEMETRY=1 promptfoo eval'",
-        "evals-view": "npm run evals && promptfoo view"
+        "evals-view": "cd evals && promptfoo view"
     },
     "dependencies": {
         "chanfana": "^2.6.3",
