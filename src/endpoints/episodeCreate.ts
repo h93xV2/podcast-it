@@ -132,8 +132,10 @@ export class EpisodeCreate extends OpenAPIRoute {
 
             const updateStmt = c.env.DB.prepare('UPDATE Episodes SET Status = \'complete\', Transcript = ?, AudioFile = ? WHERE Slug = ?');
             await updateStmt.bind(JSON.stringify(script), uploadName, podcastToCreate.slug).run();
-        }).catch((reason) => {
+        }).catch(async (reason) => {
             console.error(reason);
+            const errorStmt = c.env.DB.prepare('UPDATE Episodes SET Status = \'error\' WHERE Slug = ?');
+            await errorStmt.bind(podcastToCreate.slug).run();
         }));
 
         // TODO: Needs to also return uploadName as audioFile
