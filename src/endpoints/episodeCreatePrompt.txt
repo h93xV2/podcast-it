@@ -9,6 +9,7 @@ Instructions:
     - Read the provided blog post text carefully.
     - Summarize and rephrase the content in a conversational tone suitable for spoken audio.
     - Use only the host names provided in the input. No other names are allowed.
+    - The hosts must introduce the name of the show in the opening lines.
     - The hosts must introduce themselves by name in the opening lines.
     - The hosts must clearly state that they are discussing a blog post, and if a title is provided, they must credit it verbatim.
     - The hosts must not claim to be the authors of the source material.

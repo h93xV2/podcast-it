@@ -53,9 +53,11 @@ export class EpisodeCreate extends OpenAPIRoute {
     async handle(c: AppContext) {
         const data = await this.getValidatedData<typeof this.schema>();
         const podcastToCreate = data.body;
-        const uploadName = `${podcastToCreate.slug}.wav`;
-        const insertStmt = c.env.DB.prepare('INSERT INTO Episodes (Slug) VALUES (?) ON CONFLICT(Slug) DO NOTHING');
-        const insertResult = await insertStmt.bind(podcastToCreate.slug).run();
+        const {hosts, slug, episodeTitle, showTitle, content} = podcastToCreate;
+        const uploadName = `${slug}.wav`;
+        const insertStmt = c.env.DB
+            .prepare('INSERT INTO Episodes (Slug, EpisodeTitle, ShowTitle) VALUES (?, ?, ?) ON CONFLICT(Slug) DO NOTHING');
+        const insertResult = await insertStmt.bind(slug, episodeTitle, showTitle).run();
 
         if (!insertResult.meta.changed_db) {
             return new Response('Conflict: episode already exists', { status: 409 });
@@ -64,7 +66,7 @@ export class EpisodeCreate extends OpenAPIRoute {
         const client = new OpenAI({
             apiKey: c.env.OPENAI_API_KEY
         });
-        const hostNameToVoice = new Map(podcastToCreate.hosts.map(host => [host.name.toLowerCase(), host.voice]));
+        const hostNameToVoice = new Map(hosts.map(host => [host.name.toLowerCase(), host.voice]));
 
         c.executionCtx.waitUntil(client.responses.parse({
             model: "gpt-4o-2024-08-06",
@@ -76,8 +78,9 @@ export class EpisodeCreate extends OpenAPIRoute {
                 {
                     role: "user",
                     content: JSON.stringify({
-                        content: podcastToCreate.content,
-                        hosts: podcastToCreate.hosts,
+                        content: content,
+                        hosts: hosts,
+                        showTitle
                     }),
                 },
             ],
@@ -135,7 +138,7 @@ export class EpisodeCreate extends OpenAPIRoute {
         }).catch(async (reason) => {
             console.error(reason);
             const errorStmt = c.env.DB.prepare('UPDATE Episodes SET Status = \'error\' WHERE Slug = ?');
-            await errorStmt.bind(podcastToCreate.slug).run();
+            await errorStmt.bind(slug).run();
         }));
 
         // TODO: Needs to also return uploadName as audioFile

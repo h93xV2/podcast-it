@@ -19,13 +19,14 @@ defaultTest:
     hosts:
       - { name: Alice, voice: ash }
       - { name: Bob, voice: alloy }
+    showTitle: "The Hello World Show"
   assert:
     - type: is-json
       value: file://schemas/podcast-script.expected_format.json
     - type: llm-rubric
-      value: Ensure the output is conversational, the hosts introduce themselves, the hosts do not claim to be authors of the source material, and the hosts introduce the topic they will be talking about
+      value: Ensure the output is conversational, the hosts introduce themselves, and they introduce the name of the show.
     - type: llm-rubric
-      value: The hosts make it clear they are talking about a blog post.
+      value: The hosts make it clear they are talking about a blog post, otherwise the hosts introduce the topic they will be talking about. The hosts do not claim to be authors of the source material.
     - type: javascript
       value: |
         var allowed = new Set(context.vars.hosts.map(h => h.name));
@@ -34,6 +35,8 @@ defaultTest:
     - type: conversation-relevance
       threshold: 0.9
     - type: moderation
+    - type: contains
+      value: "{{showTitle}}"
 
 tests:
   - vars:

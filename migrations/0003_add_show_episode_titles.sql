@@ -1,0 +1,5 @@
+ALTER TABLE Episodes
+ADD COLUMN EpisodeTitle TEXT;
+
+ALTER TABLE Episodes
+ADD COLUMN ShowTitle TEXT;

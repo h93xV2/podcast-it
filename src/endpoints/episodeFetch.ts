@@ -68,7 +68,9 @@ export class EpisodeFetch extends OpenAPIRoute {
                 slug: episodeRecord.Slug,
                 audioFile: episodeRecord.AudioFile,
                 status: episodeRecord.Status,
-                transcript: episodeRecord.Transcript
+                transcript: episodeRecord.Transcript,
+                episodeTitle: episodeRecord.EpisodeTitle,
+                showTitle: episodeRecord.ShowTitle
             }
         };
 

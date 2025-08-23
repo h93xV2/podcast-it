@@ -12,6 +12,8 @@ type DeleteRow = {
     Title: string;
     Description: string;
     Transcript: string;
+    EpisodeTitle: string;
+    ShowTitle: string;
 };
 
 export class EpisodeDelete extends OpenAPIRoute {
@@ -68,7 +70,9 @@ export class EpisodeDelete extends OpenAPIRoute {
                 slug,
                 status: 'deleted',
                 audioFile,
-                transcript: deletedRow.Transcript
+                transcript: deletedRow.Transcript,
+                episodeTitle: deletedRow.EpisodeTitle,
+                showTitle: deletedRow.ShowTitle
             },
             success: true
         }

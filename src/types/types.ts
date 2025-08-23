@@ -24,7 +24,9 @@ export const Host = z.object({
 export const EpisodeInput = z.object({
     slug: Str({ required: true }),
     content: Str({ required: true }),
-    hosts: z.array(Host)
+    hosts: z.array(Host),
+    episodeTitle: Str({ required: true }),
+    showTitle: Str({ required: true })
 });
 
 export const Episode = EpisodeInput
@@ -40,6 +42,8 @@ export type EpisodeRecord = {
     AudioFile: string;
     Status: string;
     Transcript: string;
+    EpisodeTitle: string;
+    ShowTitle: string;
 };
 
 export const PodcastScript = z.object({
