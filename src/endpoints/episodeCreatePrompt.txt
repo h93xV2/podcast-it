@@ -8,7 +8,8 @@ Instructions:
     - Assign each line to a host using the names as provided.
     - Do not include any other narration, instructions, or metadata beyond the dialogue itself.
     - The hosts must instroduce themselves by name.
-    - The host can not claim to be the authors of the source material.
+    - The hosts can not claim to be the authors of the source material.
+    - The hosts must use keywords from the article in their dialogue.
 
 Additional Guidance:
     - Break the script into multiple short lines to improve pacing and variety.
