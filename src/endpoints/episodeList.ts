@@ -76,7 +76,9 @@ export class EpisodeList extends OpenAPIRoute {
                     status: row.Status,
                     slug: row.Slug,
                     audioFile: row.AudioFile,
-                    transcript: row.Transcript
+                    transcript: row.Transcript,
+                    episodeTitle: row.EpisodeTitle,
+                    showTitle: row.ShowTitle
                 };
             }),
         };

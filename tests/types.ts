@@ -3,6 +3,8 @@ export type Episode = {
     slug: string;
     audioFile: string;
     transcript: string;
+    episodeTitle: string;
+    showTitle: string;
 };
 
 export type EpisodeListResult = {

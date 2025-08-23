@@ -49,13 +49,15 @@ describe("Get episodes list", () => {
         const slug = "hello-world";
         const audioFile = "hello-world.mp3";
         const transcript = "Hello world";
+        const episodeTitle = "Hello World";
+        const showTitle = "Hello World";
 
         await env.DB
             .prepare(
-                `INSERT INTO Episodes (status, slug, audioFile, transcript)
-                VALUES (?1, ?2, ?3, ?4)`
+                `INSERT INTO Episodes (status, slug, audioFile, transcript, EpisodeTitle, ShowTitle)
+                VALUES (?1, ?2, ?3, ?4, ?5, ?6)`
             )
-            .bind(status, slug, audioFile, transcript)
+            .bind(status, slug, audioFile, transcript, episodeTitle, showTitle)
             .run();
 
         const response = await call(env, "GET", "http://example.com/api/episodes")
@@ -71,6 +73,8 @@ describe("Get episodes list", () => {
         expect(episode.slug).toEqual(slug);
         expect(episode.status).toEqual(status);
         expect(episode.transcript).toEqual(transcript);
+        expect(episode.showTitle).toEqual(showTitle);
+        expect(episode.episodeTitle).toEqual(episodeTitle);
     });
 });
 
@@ -96,7 +100,9 @@ describe("Episode creation", () => {
             hosts: [{
                 "name": "Test Host",
                 "voice": "alloy"
-            }]
+            }],
+            episodeTitle: "Hello World - ep1",
+            showTitle: "Hello World"
         };
         const createResponse = await call(env, "POST", "http://example.com/api/episodes", podcastToCreate);
         const createStatusCode = createResponse.status;
@@ -139,7 +145,9 @@ describe("Episode creation", () => {
             hosts: [{
                 "name": "Test Host",
                 "voice": "alloy"
-            }]
+            }],
+            episodeTitle: "Hello World - ep1",
+            showTitle: "Hello World"
         };
 
         const firstCreateResponse = await call(env, "POST", "http://example.com/api/episodes", podcastToCreate);
@@ -152,5 +160,20 @@ describe("Episode creation", () => {
         expect(await secondCreateResponse.text()).toBe('Conflict: episode already exists');
     });
 
-    // TODO: Add a new status "error" to the database.
+    it ('returns 400 when the wrong arguments are passed', async () => {
+        const podcastToCreate = {
+            slug: "test",
+            content: "This is a simple test",
+            hosts: [{
+                "name": "Test Host",
+                "voice": "alloy"
+            }]
+        };
+
+        const createResponse = await call(env, "POST", "http://example.com/api/episodes", podcastToCreate);
+
+        expect(createResponse.status).toBe(400);
+    });
+
+    // TODO: Add tests for 'error' status in database.
 });
