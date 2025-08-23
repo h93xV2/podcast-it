@@ -5,6 +5,6 @@
     },
     {
         "role": "user",
-        "content": "{ \"content\": {{ content }}, \"hosts\": {{ hosts }} }"
+        "content": "{ \"content\": {{ content }}, \"hosts\": {{ hosts | dump }} }"
     }
 ]

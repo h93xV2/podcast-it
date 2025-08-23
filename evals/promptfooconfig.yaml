@@ -22,6 +22,16 @@ defaultTest:
   assert:
     - type: is-json
       value: file://schemas/podcast-script.expected_format.json
+    - type: llm-rubric
+      value: Ensure the output is conversational, the hosts introduce themselves, the hosts do not claim to be authors of the source material, and the hosts introduce the topic they will be talking about
+    - type: javascript
+      value: |
+        var allowed = new Set(context.vars.hosts.map(h => h.name));
+        return Array.isArray(output.dialogue) &&
+          output.dialogue.every(t => allowed.has(t.hostName));
+    - type: conversation-relevance
+      threshold: 0.9
+    - type: moderation
 
 tests:
   - vars:
@@ -38,8 +48,22 @@ tests:
   
   - vars:
       content: new york city
+  
+  - vars:
+      content: file://posts/semantic-related-posts-astro-cosine-similarity.txt
     assert:
-      # For more information on model-graded evals, see https://promptfoo.dev/docs/configuration/expected-outputs/model-graded
-      - type: llm-rubric
-        value: ensure that the output is conversational
-
+      - type: contains-all
+        value:
+          - 'embeddings'
+          - 'cosine similarity'
+          - 'Astro'
+  
+  - vars:
+      content: file://posts/migrating-blog-from-digitalocean-to-aws.txt
+    assert:
+      - type: contains-all
+        value:
+          - "DigitalOcean"
+          - "AWS Amplify"
+          - "S3"
+          - "security headers"
