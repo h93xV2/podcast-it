@@ -57,3 +57,13 @@ tests:
           - 'embeddings'
           - 'cosine similarity'
           - 'Astro'
+  
+  - vars:
+      content: file://posts/migrating-blog-from-digitalocean-to-aws.txt
+    assert:
+      - type: contains-all
+        value:
+          - "DigitalOcean"
+          - "AWS Amplify"
+          - "S3"
+          - "security headers"
