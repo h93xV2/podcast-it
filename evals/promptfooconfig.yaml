@@ -24,6 +24,8 @@ defaultTest:
       value: file://schemas/podcast-script.expected_format.json
     - type: llm-rubric
       value: Ensure the output is conversational, the hosts introduce themselves, the hosts do not claim to be authors of the source material, and the hosts introduce the topic they will be talking about
+    - type: llm-rubric
+      value: The hosts make it clear they are talking about a blog post.
     - type: javascript
       value: |
         var allowed = new Set(context.vars.hosts.map(h => h.name));
@@ -67,3 +69,6 @@ tests:
           - "AWS Amplify"
           - "S3"
           - "security headers"
+
+  - vars:
+      content: file://posts/checking-in-recent-adventures-web-development.txt

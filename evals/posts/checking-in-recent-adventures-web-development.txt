@@ -1,0 +1,77 @@
+Checking In: My Recent Adventures in Web Development
+Updates on my latest web development projects, challenges, and future plans.
+#programming #webdev
+Published Jul 22, 2024
+6 min read
+
+Introduction
+
+In this post, I’m going to talk about stuff I’ve been working on in the past, present, and future.
+
+Recent Projects (Outside of Day Job)
+
+Outside of my day-to-day work as a backend software engineer, this is what I’ve been up to:
+
+Started the Deep Learning Specialization on Coursera and completed the first of five courses.
+
+Built a social media landing page for my website.
+
+Participated in the AWS Amplify TypeScript Challenge on dev.to. Did some SEO optimizations for some of my previous articles. Website maintenance and bug fixes.
+
+Deep Learning Specialization
+
+The Deep Learning Specialization has been an interesting learning opportunity. The course starts with a focus on the fundamentals of machine learning and has required me to brush off some of my math skills. I was pleasantly surprised to find that those skilled hadn’t atrophied since completing my undergrad. For example, I can still do some moderately complex alegbra in my head. The reason I’m doing the course is because I’ve done some work with machine learning and LLMs over the last year. I’ve also done some other Coursera courses like the DeepLearning.AI Tensorflow Developer Professional Certificate and the Practical Data Science on the AWS Cloud Specialization. These courses have helped me to better understand ML/AI which has already benefited me in my career. Being able to better understand these technologies at a fundamental level has helped me to make more informed development decisions.
+
+SEO Optimizations
+
+While looking at my website’s Google Search Console metrics, I noticed some queries are more popular for some pages than others. However, some of these pages didn’t have keywords matching the queries. As such, I’ve modified some previous articles to better match with what people are searching for. For example, some of the queries are:
+
+bulma dark mode cloudflare pages vs aws amplify bulma dark mode toggle
+
+Hopefully, these updates will make it easier for people to find my articles.
+
+Website Improvements and Bug Fixes
+
+Improvements
+
+A big improvement I was working on was changes to images. Lighthouse has been recommending I use appropriate image sizes for a while now. To meet its recommendation, I made some modifications to the code based on the articles Astro 3.3: Picture component. In the article, the Astro team described added support for the srcset attribute. While this seems to have been in Astro for a while, I wasn’t aware of it. So I added the widths and sizes attributes to my images on the / and /blog pages. Here’s a snippet: // ... const sizes = ` (min-width: 1420px) 282px, (min-width: 1220px) 234px, (min-width: 1040px) 186px, (min-width: 780px) calc(25vw - 42px), calc(100vw - 96px) `; // ... const heroImage = post.data.heroImage; const heroWidths = [ heroImage.width, heroImage.width / 2, heroImage.width / 4, heroImage.width / 6, heroImage.width / 8, heroImage.width / 10, heroImage.width / 20, heroImage.width / 62 ].filter(number => number % 1 == 0); return ( <li class="card"> <article class="mb-5 card-content"> <div class="columns is-vcentered"> <div class="column is-one-quarter"> <Image src={heroImage} alt={post.data.heroImageAlt} widths={heroWidths} sizes={sizes} /> // ... </div> </div> </article> </li> ); Google has a good article titled Properly size images to help developers understand the “Properly size images” recommendation from Lighthouse and Page Speed Insights. Additionally, they recommend this bookmarklet called RespImageLint which can be used to help identify problem images. I used it myself to create the sizes string seen in the previous code snippet.
+
+Bug Fixes
+
+The other day I realized there was a problem with the table of contents on my blog post articles. The table of contents is a component which has had various bugs throughout its life. The last time I updated it, I neglected to test it on large format screens. Under certain conditions, section links wouldn’t be highlighted. This would happen when there were multiple sections at the bottom of the page. To fix this, I had to update the client side JavaScript to account for when the user has reached the bottom of the page.
+
+Challenges and Learnings
+
+With all the things I’ve been working on, these are the main challenges and learnings I encountered:
+
+AWS Amplify challenge showed I need to practice more at competing in fullstack challenges. Running things, like this website, on a budget forces decision making. Time management is an ongoing skill I need to practice.
+
+Competing in the Amplify challenge showed some weaknesses I have at competing in developer challenges. Mainly, I approached it thinking it would be easy since I’d already worked with Amplify. However, I found myself fretting too much about inconsequential details. What ended up being important was making decisions and sticking to them. Second guessing led to a lot of wasted time. Understanding the importance of decision making applies to running this website. When you’re on a budget, sometimes you need to make decisions. Making a decision doesn’t have to be the end of the story though. Doing things iteratively still leaves room for growth. With that being said, I realized also that time management is very important. Splitting my time between so many tasks started to make me feel overwhelmed and I had to start time boxing things more. More aggresive time boxing seems like its going to be more and more important for me as time moves forward.
+
+Upcoming Plans
+
+Looking forward, these are the plans I have in the near future:
+
+Upgrade the contact page. Release music. Participate in the upcoming Nylas challenge on dev.to.
+
+For the contact page, I want to get some practice in with Cloudflare Workers and HTMX. This is an idea I’ve had for a while, and I feel like now is as good a time as any to do it. As far as music releases are concerned, I have a few tracks I’ve been sitting on. The hard part with this project for me has been perfectionism. Additionally, I don’t even have an artist name decided on yet. However, once I have picked a name and finished the tracks, I will be adding a new page to this site to link to my uploads. Lastly, I am tentatively planning in participating in another challenge on dev.to. Hopefully, I’ll have enough time for that 😜.
+
+Conclusion
+
+Hopefully these updates are interesting and informative. There’s a lot of different things going on without much connection. Also, I’ve decided to not spend too much time writing this update, so the tone and feel is a little more loose and casual than my usual posts. Stay tuned for more to come!
+
+Similar Posts
+
+Latest Developments and a Glimpse Ahead at Logarithmic Spirals Explore recent updates at Logarithmic Spirals such as code improvements, design changes, and a sneak peek at what's to come.
+
+🛠️ Syncing dev.to Posts with Your Static Astro Blog 🚀 Showcase your dev.to posts on your Astro blog using API integration. Perfect for static sites - no database required. Includes cross-posting and SEO tips.
+
+Another Migration: From Gatsby to Astro Learn about how I transitioned my personal website from Gatsby to Astro as I share insights and experiences from the migration process.
+
+Welcome to my blog! I am a software engineer based in Southern California, and I love sharing my thoughts and experiences about all things tech. From software development and programming to the latest tech trends and news, you'll find it all here on my blog. Follow along to stay up to date and get insights from a real-life software engineer living and working in SoCal. Thanks for visiting!
+
+← Building a Social Media Landing ... Email Buddy: An LLM-Enhanced Inbox → Table of Contents Introduction Recent Projects (Outside of Day Job) Deep Learning Specialization SEO Optimizations Website Improvements and Bug Fixes Improvements Bug Fixes Challenges and Learnings Upcoming Plans Conclusion 0% New post! From Idea to Audio: Building the Podcast-It Cloudflare Worker Click here to read more!
+
+© 2025, Created with Astro, Bulma, and Cloudflare Pages.
+
+— Privacy Policy • About • Contact—
