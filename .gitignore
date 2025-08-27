@@ -177,3 +177,4 @@ test.wav
 
 # Ignore generated JSON schemas
 evals/schemas/
+evals/promptfoo-errors.log
