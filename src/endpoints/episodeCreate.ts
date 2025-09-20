@@ -100,7 +100,7 @@ export class EpisodeCreate extends OpenAPIRoute {
             throw new Error("Script was not received from model");
           }
 
-          for (let element of script.dialogue) {
+          for (const element of script.dialogue) {
             const ttsResponse = await client.audio.speech.create({
               model: "gpt-4o-mini-tts",
               voice: hostNameToVoice.get(element.hostName.toLowerCase()) || "alloy",

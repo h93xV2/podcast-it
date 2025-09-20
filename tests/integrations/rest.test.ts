@@ -2,13 +2,14 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { env } from "cloudflare:test";
 import { Episode, EpisodeFetchResult, EpisodeListResult } from "../types";
 import { call } from "../utils";
+import { ClientOptions } from "openai";
 
 const responsesParse = vi.fn();
 const audioCreate = vi.fn();
 
 vi.mock("openai", () => {
   class OpenAI {
-    constructor(_: any) {}
+    constructor(_: ClientOptions) {}
     get responses() {
       return { parse: responsesParse };
     }
