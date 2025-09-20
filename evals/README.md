@@ -7,6 +7,7 @@ For convenience, the `OPENAI_API_KEY` will be copied from `.dev.vars` when runni
 Next, edit promptfooconfig.yaml.
 
 Then run:
+
 ```
 promptfoo eval
 ```

@@ -1,39 +1,48 @@
 {
-    "name": "podcast-it",
-    "version": "1.0.6",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "deploy": "wrangler deploy",
-        "migrate": "wrangler d1 migrations apply podcasts --local",
-        "dev": "npm run migrate && wrangler dev",
-        "cf-typegen": "wrangler types",
-        "test-watch": "vitest --config vitest.config.ts",
-        "test": "vitest run --config vitest.config.ts",
-        "prepare": "husky",
-        "prepush": "npm run typecheck && npm test && npm run evals",
-        "typecheck": "tsc -p tsconfig.json",
-        "export-schemas": "tsx evals/export-schemas.ts",
-        "evals": "npm run export-schemas && npx dotenvx run -f .dev.vars -- sh -c 'cd evals && PROMPTFOO_DISABLE_TELEMETRY=1 promptfoo eval'",
-        "evals-view": "cd evals && promptfoo view"
-    },
-    "dependencies": {
-        "chanfana": "^2.6.3",
-        "hono": "^4.9.6",
-        "openai": "^5.8.2",
-        "zod": "^3.25.67"
-    },
-    "devDependencies": {
-        "@cloudflare/vitest-pool-workers": "^0.8.70",
-        "@dotenvx/dotenvx": "^1.49.0",
-        "@types/node": "^22.13.0",
-        "husky": "^9.1.7",
-        "miniflare": "^4.20250803.0",
-        "promptfoo": "^0.117.10",
-        "typescript": "^5.9.2",
-        "vitest": "~3.2.0",
-        "wrangler": "^4.32.0",
-        "zod-to-json-schema": "^3.24.6"
-    },
-    "license": "MIT"
+  "name": "podcast-it",
+  "version": "1.0.6",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "migrate": "wrangler d1 migrations apply podcasts --local",
+    "dev": "npm run migrate && wrangler dev",
+    "cf-typegen": "wrangler types",
+    "test-watch": "vitest --config vitest.config.ts",
+    "test": "vitest run --config vitest.config.ts",
+    "prepare": "husky",
+    "prepush": "npm run typecheck && npm test && npm run evals",
+    "typecheck": "tsc -p tsconfig.json",
+    "export-schemas": "tsx evals/export-schemas.ts",
+    "evals": "npm run export-schemas && npx dotenvx run -f .dev.vars -- sh -c 'cd evals && PROMPTFOO_DISABLE_TELEMETRY=1 promptfoo eval'",
+    "evals-view": "cd evals && promptfoo view",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "chanfana": "^2.6.3",
+    "hono": "^4.9.6",
+    "openai": "^5.8.2",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.70",
+    "@dotenvx/dotenvx": "^1.49.0",
+    "@eslint/js": "^9.36.0",
+    "@types/node": "^22.13.0",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "miniflare": "^4.20250803.0",
+    "prettier": "^3.6.2",
+    "promptfoo": "^0.117.10",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.0",
+    "vitest": "~3.2.0",
+    "wrangler": "^4.32.0",
+    "zod-to-json-schema": "^3.24.6"
+  },
+  "license": "MIT"
 }

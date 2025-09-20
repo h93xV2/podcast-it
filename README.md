@@ -8,7 +8,7 @@ This project exposes a REST API for transforming text content into audio for pod
 
 1. Sign up for [Cloudflare Workers](https://workers.dev). The free tier is more than enough for most use cases.
 2. Clone this project and install dependencies with `npm install`.
-3. Create a `.dev.vars` file and add an `OPENAI_API_KEY` entry with an [OpenAI API key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key). 
+3. Create a `.dev.vars` file and add an `OPENAI_API_KEY` entry with an [OpenAI API key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key).
 4. Create a R2 bucket with `npx wrangler r2 bucket create podcasts`.
 5. Create a D1 database with `npx wrangler@latest d1 create podcasts`.
 6. Run `wrangler login` to login to your Cloudflare account in wrangler.
@@ -29,6 +29,7 @@ This project exposes a REST API for transforming text content into audio for pod
 ## Securing the Deployments
 
 For a secure deployment, the following steps should suffice:
+
 1. Set up Cloudflare Zero Trust.
 2. Create an application for the dev worker URL.
 3. Create a service token.
@@ -41,6 +42,7 @@ For a secure deployment, the following steps should suffice:
 Run tests with `npm run test`.
 
 Caveats:
+
 - Currently, vitest watch mode is broken with D1 https://github.com/cloudflare/workers-sdk/issues/9913.
 - Vitest `__mocks__` do not work https://github.com/cloudflare/workers-sdk/issues/7679.
 

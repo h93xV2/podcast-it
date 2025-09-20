@@ -6,7 +6,6 @@ description: "podcast-it eval"
 
 prompts:
   - file://messages.template.json
-  
 
 providers:
   - id: "openai:responses:gpt-4o-2024-08-06"
@@ -50,19 +49,19 @@ tests:
       # Make sure output contains the word "avocado"
       - type: icontains
         value: avocado
-  
+
   - vars:
       content: new york city
-  
+
   - vars:
       content: file://posts/semantic-related-posts-astro-cosine-similarity.txt
     assert:
       - type: contains-all
         value:
-          - 'embeddings'
-          - 'cosine similarity'
-          - 'Astro'
-  
+          - "embeddings"
+          - "cosine similarity"
+          - "Astro"
+
   - vars:
       content: file://posts/migrating-blog-from-digitalocean-to-aws.txt
     assert:
