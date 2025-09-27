@@ -61,7 +61,7 @@ export class EpisodeCreate extends OpenAPIRoute {
     const insertResult = await insertStmt.bind(slug, episodeTitle, showTitle).run();
 
     if (!insertResult.meta.changed_db) {
-      return new Response("Conflict: episode already exists", { status: 409 });
+      return Response.json({message: "Conflict: the response already exists"}, {status: 409});
     }
 
     const client = new OpenAI({
