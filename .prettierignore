@@ -4,3 +4,4 @@ coverage
 dist
 *.log
 /.wrangler
+worker-configuration.d.ts
