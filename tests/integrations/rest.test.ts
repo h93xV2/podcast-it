@@ -174,7 +174,9 @@ describe("Episode creation", () => {
     );
 
     expect(secondCreateResponse.status).toBe(409);
-    expect(await secondCreateResponse.json()).toEqual({message: "Conflict: episode already exists"});
+    expect(await secondCreateResponse.json()).toEqual({
+      message: "Conflict: episode already exists",
+    });
   });
 
   it("returns 400 when the wrong arguments are passed", async () => {
