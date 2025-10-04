@@ -37,6 +37,14 @@ For a secure deployment, the following steps should suffice:
 5. Assign the policy to the application.
 6. Deploy the application.
 
+## Application Deployment
+
+```shell
+npx wrangler login
+npx wrangler d1 migrations apply podcasts --remote
+npx wrangler deploy
+```
+
 ## Testing
 
 Run tests with `npm run test`.
