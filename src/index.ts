@@ -27,11 +27,18 @@ export default {
     fetch: app.fetch,
     async queue(batch: MessageBatch<EpisodeInput>, env: Env) {
         const client = new OpenAI({
-            apiKey: env.OPENAI_API_KEY
+            apiKey: env.OPENAI_API_KEY,
         });
-        
-        for (const message of batch.messages) {
-            await createEpisode(env.DB, env.podcasts, client, message.body);
-        }
+
+        console.log(`Received ${batch.messages} episode create request(s)`);
+
+        const promises = batch.messages.map(async (message) => {
+            console.log(`Received create request from queue for slug ${message.body.slug}`);
+            return createEpisode(env.DB, env.podcasts, client, message.body);
+        });
+
+        await Promise.all(promises);
+
+        console.log(`Creation finished for ${batch.messages.length} episode(s)`);
     },
 };
