@@ -2,48 +2,48 @@
 name: Bump version
 
 on:
-  push:
-    branches: [main]
+    push:
+        branches: [main]
 
 permissions:
-  contents: write
+    contents: write
 
 jobs:
-  bump:
-    if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    bump:
+        if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
 
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+            - name: Configure Git
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Decide bump type
-        id: bump
-        run: |
-          msg="${{ github.event.head_commit.message }}"
-          if echo "$msg" | grep -qiE "major"; then
-            echo "level=major" >> $GITHUB_OUTPUT
-          elif echo "$msg" | grep -qiE "minor"; then
-            echo "level=minor" >> $GITHUB_OUTPUT
-          else
-            echo "level=patch" >> $GITHUB_OUTPUT
-          fi
+            - name: Decide bump type
+              id: bump
+              run: |
+                  msg="${{ github.event.head_commit.message }}"
+                  if echo "$msg" | grep -qiE "major"; then
+                    echo "level=major" >> $GITHUB_OUTPUT
+                  elif echo "$msg" | grep -qiE "minor"; then
+                    echo "level=minor" >> $GITHUB_OUTPUT
+                  else
+                    echo "level=patch" >> $GITHUB_OUTPUT
+                  fi
 
-      - name: Bump version
-        run: |
-          npm version ${{ steps.bump.outputs.level }} -m "chore: bump version to %s [skip ci]"
+            - name: Bump version
+              run: |
+                  npm version ${{ steps.bump.outputs.level }} -m "chore: bump version to %s [skip ci]"
 
-      - name: Push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git push --follow-tags
+            - name: Push changes
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  git push --follow-tags
