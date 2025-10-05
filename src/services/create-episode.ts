@@ -1,13 +1,14 @@
 import OpenAI from "openai";
-import { AppContext, EpisodeInput, PodcastScript } from "../types/types";
+import { EpisodeInputSchema, PodcastScript } from "../types/types";
 import z from "zod";
 import { zodTextFormat } from "openai/helpers/zod";
+import prompt from "../endpoints/episodeCreatePrompt.txt";
 
 const createEpisode = async (
-    c: AppContext,
+    db: D1Database,
+    bucket: R2Bucket,
     client: OpenAI,
-    prompt: string,
-    episodeInput: z.infer<typeof EpisodeInput>,
+    episodeInput: z.infer<typeof EpisodeInputSchema>,
 ) => {
     const { content, hosts, showTitle, slug } = episodeInput;
 
@@ -81,15 +82,15 @@ const createEpisode = async (
 
         // Combine header + data
         const finalWavBuffer = Buffer.concat([firstHeader, concatenatedData]);
-        await c.env.podcasts.put(uploadName, finalWavBuffer);
+        await bucket.put(uploadName, finalWavBuffer);
 
-        const updateStmt = c.env.DB.prepare(
+        const updateStmt = db.prepare(
             "UPDATE Episodes SET Status = 'complete', Transcript = ?, AudioFile = ? WHERE Slug = ?",
         );
         await updateStmt.bind(JSON.stringify(script), uploadName, slug).run();
     } catch (reason) {
         console.error(reason);
-        const errorStmt = c.env.DB.prepare("UPDATE Episodes SET Status = 'error' WHERE Slug = ?");
+        const errorStmt = db.prepare("UPDATE Episodes SET Status = 'error' WHERE Slug = ?");
         await errorStmt.bind(slug).run();
     }
 };

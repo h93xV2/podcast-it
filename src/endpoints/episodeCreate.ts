@@ -1,9 +1,6 @@
 import { Bool, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
-import { type AppContext, EpisodeInput, Episode } from "../types/types";
-import OpenAI from "openai";
-import prompt from "./episodeCreatePrompt.txt";
-import createEpisode from "../services/create-episode";
+import { type AppContext, EpisodeInputSchema, Episode } from "../types/types";
 
 export class EpisodeCreate extends OpenAPIRoute {
     schema = {
@@ -13,7 +10,7 @@ export class EpisodeCreate extends OpenAPIRoute {
             body: {
                 content: {
                     "application/json": {
-                        schema: EpisodeInput,
+                        schema: EpisodeInputSchema,
                     },
                 },
             },
@@ -54,7 +51,7 @@ export class EpisodeCreate extends OpenAPIRoute {
         const data = await this.getValidatedData<typeof this.schema>();
         const podcastToCreate = data.body;
         const { slug, episodeTitle, showTitle } = podcastToCreate;
-        
+
         const insertStmt = c.env.DB.prepare(
             "INSERT INTO Episodes (Slug, EpisodeTitle, ShowTitle) VALUES (?, ?, ?) ON CONFLICT(Slug) DO NOTHING",
         );
@@ -64,13 +61,7 @@ export class EpisodeCreate extends OpenAPIRoute {
             return Response.json({ message: "Conflict: episode already exists" }, { status: 409 });
         }
 
-        const client = new OpenAI({
-            apiKey: c.env.OPENAI_API_KEY,
-        });
-        
-        c.executionCtx.waitUntil(
-            createEpisode(c, client, prompt, podcastToCreate)
-        );
+        c.env.episodes.send(podcastToCreate);
 
         return new Response(
             JSON.stringify({

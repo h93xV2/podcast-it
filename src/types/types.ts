@@ -21,7 +21,7 @@ export const Host = z.object({
     ]),
 });
 
-export const EpisodeInput = z.object({
+export const EpisodeInputSchema = z.object({
     slug: Str({ required: true }),
     content: Str({ required: true }),
     hosts: z.array(Host),
@@ -29,7 +29,9 @@ export const EpisodeInput = z.object({
     showTitle: Str({ required: true }),
 });
 
-export const Episode = EpisodeInput.omit({ content: true, hosts: true }).extend({
+export type EpisodeInput = z.infer<typeof EpisodeInputSchema>;
+
+export const Episode = EpisodeInputSchema.omit({ content: true, hosts: true }).extend({
     audioFile: Str({ required: true }),
     status: Str({ required: true }),
     transcript: Str(),
