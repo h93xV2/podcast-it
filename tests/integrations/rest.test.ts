@@ -79,16 +79,6 @@ describe("Get episodes list", () => {
 describe("Episode creation", () => {
     it("creates a podcast episode", async () => {
         const testAudio = new Uint8Array(64);
-
-        responsesParse.mockResolvedValue({
-            output_parsed: {
-                dialogue: [{ hostName: "Test Host", dialogue: "Hello" }],
-            },
-        });
-        audioCreate.mockResolvedValue({
-            arrayBuffer: async () => testAudio.buffer,
-        });
-
         const testSlug = "test";
         const podcastToCreate = {
             slug: testSlug,
@@ -135,15 +125,6 @@ describe("Episode creation", () => {
     });
 
     it("cannot create an episode that already exists", async () => {
-        responsesParse.mockResolvedValue({
-            output_parsed: {
-                dialogue: [{ hostName: "Test Host", dialogue: "Hello" }],
-            },
-        });
-        audioCreate.mockResolvedValue({
-            arrayBuffer: async () => new Uint8Array(64).buffer,
-        });
-
         const podcastToCreate = {
             slug: "test",
             content: "This is a simple test",

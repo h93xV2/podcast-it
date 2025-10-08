@@ -30,7 +30,7 @@ export default {
             apiKey: env.OPENAI_API_KEY,
         });
 
-        console.log(`Received ${batch.messages} episode create request(s)`);
+        console.log(`Received ${batch.messages.length} episode create request(s)`);
 
         const promises = batch.messages.map(async (message) => {
             console.log(`Received create request from queue for slug ${message.body.slug}`);
