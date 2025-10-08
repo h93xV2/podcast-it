@@ -16,6 +16,9 @@ export default defineWorkersProject(async () => {
                         d1Persist: false,
                         bindings: { TEST_MIGRATIONS: migrations },
                         r2Buckets: ["podcasts"],
+                        queueProducers: {
+                            episodes: { queueName: "episodes" },
+                        },
                     },
                 },
             },
