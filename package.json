@@ -19,7 +19,8 @@
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "precommit": "lint-staged"
     },
     "dependencies": {
         "chanfana": "^2.6.3",
@@ -36,6 +37,7 @@
         "eslint": "^9.36.0",
         "eslint-config-prettier": "^10.1.8",
         "husky": "^9.1.7",
+        "lint-staged": "^16.2.3",
         "miniflare": "^4.20250803.0",
         "prettier": "^3.6.2",
         "promptfoo": "^0.118.10",
@@ -45,5 +47,11 @@
         "wrangler": "^4.42.0",
         "zod-to-json-schema": "^3.24.6"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "lint-staged": {
+        "*.{js,ts,tsx,css,md,json}": [
+            "eslint --fix",
+            "prettier --write"
+        ]
+    }
 }
