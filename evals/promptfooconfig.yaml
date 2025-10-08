@@ -5,72 +5,72 @@
 description: "podcast-it eval"
 
 prompts:
-  - file://messages.template.json
+    - file://messages.template.json
 
 providers:
-  - id: "openai:responses:gpt-4o-2024-08-06"
-    config:
-      response_format: file://schemas/podcast-script.response_format.json
+    - id: "openai:responses:gpt-4o-2024-08-06"
+      config:
+          response_format: file://schemas/podcast-script.response_format.json
 
 defaultTest:
-  vars:
-    system: file://../src/endpoints/episodeCreatePrompt.txt
-    hosts:
-      - { name: Alice, voice: ash }
-      - { name: Bob, voice: alloy }
-    showTitle: "The Hello World Show"
-  assert:
-    - type: is-json
-      value: file://schemas/podcast-script.expected_format.json
-    - type: llm-rubric
-      value: Ensure the output is conversational, the hosts introduce themselves, and they introduce the name of the show.
-    - type: llm-rubric
-      value: The hosts make it clear they are talking about a blog post, otherwise the hosts introduce the topic they will be talking about. The hosts do not claim to be authors of the source material.
-    - type: javascript
-      value: |
-        var allowed = new Set(context.vars.hosts.map(h => h.name));
-        return Array.isArray(output.dialogue) &&
-          output.dialogue.every(t => allowed.has(t.hostName));
-    - type: conversation-relevance
-      threshold: 0.9
-    - type: moderation
-    - type: contains
-      value: "{{showTitle}}"
+    vars:
+        system: file://../src/endpoints/episodeCreatePrompt.txt
+        hosts:
+            - { name: Alice, voice: ash }
+            - { name: Bob, voice: alloy }
+        showTitle: "The Hello World Show"
+    assert:
+        - type: is-json
+          value: file://schemas/podcast-script.expected_format.json
+        - type: llm-rubric
+          value: Ensure the output is conversational, the hosts introduce themselves, and they introduce the name of the show.
+        - type: llm-rubric
+          value: The hosts make it clear they are talking about a blog post, otherwise the hosts introduce the topic they will be talking about. The hosts do not claim to be authors of the source material.
+        - type: javascript
+          value: |
+              var allowed = new Set(context.vars.hosts.map(h => h.name));
+              return Array.isArray(output.dialogue) &&
+                output.dialogue.every(t => allowed.has(t.hostName));
+        - type: conversation-relevance
+          threshold: 0.9
+        - type: moderation
+        - type: contains
+          value: "{{showTitle}}"
 
 tests:
-  - vars:
-      content: bananas
+    - vars:
+          content: bananas
 
-  - vars:
-      content: avocado toast
-    assert:
-      # For more information on assertions, see https://promptfoo.dev/docs/configuration/expected-outputs
+    - vars:
+          content: avocado toast
+      assert:
+          # For more information on assertions, see https://promptfoo.dev/docs/configuration/expected-outputs
 
-      # Make sure output contains the word "avocado"
-      - type: icontains
-        value: avocado
+          # Make sure output contains the word "avocado"
+          - type: icontains
+            value: avocado
 
-  - vars:
-      content: new york city
+    - vars:
+          content: new york city
 
-  - vars:
-      content: file://posts/semantic-related-posts-astro-cosine-similarity.txt
-    assert:
-      - type: contains-all
-        value:
-          - "embeddings"
-          - "cosine similarity"
-          - "Astro"
+    - vars:
+          content: file://posts/semantic-related-posts-astro-cosine-similarity.txt
+      assert:
+          - type: contains-all
+            value:
+                - "embeddings"
+                - "cosine similarity"
+                - "Astro"
 
-  - vars:
-      content: file://posts/migrating-blog-from-digitalocean-to-aws.txt
-    assert:
-      - type: contains-all
-        value:
-          - "DigitalOcean"
-          - "AWS Amplify"
-          - "S3"
-          - "security headers"
+    - vars:
+          content: file://posts/migrating-blog-from-digitalocean-to-aws.txt
+      assert:
+          - type: contains-all
+            value:
+                - "DigitalOcean"
+                - "AWS Amplify"
+                - "S3"
+                - "security headers"
 
-  - vars:
-      content: file://posts/checking-in-recent-adventures-web-development.txt
+    - vars:
+          content: file://posts/checking-in-recent-adventures-web-development.txt

@@ -6,16 +6,16 @@ import { EpisodeFetch } from "./endpoints/episodeFetch";
 import { EpisodeList } from "./endpoints/episodeList";
 import { AudioFetch } from "./endpoints/audioFetch";
 import { EpisodesDelete } from "./endpoints/episodesDelete";
+import { EpisodeInput } from "./types/types";
+import createEpisode from "./services/create-episode";
+import OpenAI from "openai";
 
-// Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
 
-// Setup OpenAPI registry
 const openapi = fromHono(app, {
-  docs_url: "/",
+    docs_url: "/",
 });
 
-// Register OpenAPI endpoints
 openapi.get("/api/episodes", EpisodeList);
 openapi.post("/api/episodes", EpisodeCreate);
 openapi.get("/api/episodes/:slug", EpisodeFetch);
@@ -23,8 +23,22 @@ openapi.delete("/api/episodes/:slug", EpisodeDelete);
 openapi.delete("/api/episodes", EpisodesDelete);
 openapi.get("/api/audio/:file", AudioFetch);
 
-// You may also register routes for non OpenAPI directly on Hono
-// app.get('/test', (c) => c.text('Hono!'))
+export default {
+    fetch: app.fetch,
+    async queue(batch: MessageBatch<EpisodeInput>, env: Env) {
+        const client = new OpenAI({
+            apiKey: env.OPENAI_API_KEY,
+        });
 
-// Export the Hono app
-export default app;
+        console.log(`Received ${batch.messages.length} episode create request(s)`);
+
+        const promises = batch.messages.map(async (message) => {
+            console.log(`Received create request from queue for slug ${message.body.slug}`);
+            return createEpisode(env.DB, env.podcasts, client, message.body);
+        });
+
+        await Promise.all(promises);
+
+        console.log(`Creation finished for ${batch.messages.length} episode(s)`);
+    },
+};
