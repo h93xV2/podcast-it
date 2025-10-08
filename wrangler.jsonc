@@ -46,6 +46,7 @@
         "consumers": [
             {
                 "queue": "episodes",
+                "max_batch_size": 50
             },
         ],
     },
