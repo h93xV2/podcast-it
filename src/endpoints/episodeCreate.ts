@@ -61,10 +61,12 @@ export class EpisodeCreate extends OpenAPIRoute {
             return Response.json({ message: "Conflict: episode already exists" }, { status: 409 });
         }
 
-        c.env.episodes
-            .send(podcastToCreate)
-            .then(() => console.log("Episode request sent to queue"))
-            .catch((error) => console.error(error));
+        c.executionCtx.waitUntil(
+            c.env.episodes
+                .send(podcastToCreate)
+                .then(() => console.log("Episode request sent to queue"))
+                .catch((error) => console.error("Queue send failed:", error)),
+        );
 
         return new Response(
             JSON.stringify({
